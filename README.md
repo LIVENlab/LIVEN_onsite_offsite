@@ -4,3 +4,5 @@ This code allows to geographically disaggregate inventories of electricity produ
 This concept is applied to all technologies included in the Spanish Energy and Climate National Plan, which include: pumped storage, hard coal, lignite, wind onshiore, wind offshore, photovoltaic openground, photovoltaic rooftop, solar tower, solar parabolic, natural gas, oil, nuclear, hydro, and cogeneration (wood chips and natural gas).
 
 The tool is built using the capabilities of Brightway2 (Mutel, 2017).
+
+Contact: miquel.sierra@uab.cat; cristina.madrid@uab.cat
