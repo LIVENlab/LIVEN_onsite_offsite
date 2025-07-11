@@ -30,22 +30,15 @@ def transform_data_to_powerbi(data: pd.DataFrame,
     #   clean names of technologies and levels
     if name_cleaning:
         def strip_suffix(x: str) -> str:
-            if isinstance(x, str):
-                # Normalize "-onsite"/"-offsite" to "_onsite"/"_offsite"
-                x = x.replace("-onsite", "_onsite").replace("-offsite", "_offsite")
+            if not isinstance(x, str):
+                return x
 
-                # Extract base name and preserve trailing _onsite or _offsite if present
-                suffix_match = re.search(r'(_onsite|_offsite)', x)
-                suffix = suffix_match.group(0) if suffix_match else ""
+            # Normalize onsite/offsite
+            x = x.replace("-onsite", "_onsite").replace("-offsite", "_offsite")
 
-                # Remove everything from '_electricity' onward
-                x = re.sub(r'_electricity.*$', '', x)
-
-                # Remove anything after the technology name (like _carrier_prod..., _nuts0, etc.)
-                x = re.split(r'__|_', x)[0] if not suffix else x.split(suffix)[0]
-
-                # Combine base name with suffix (if any)
-                x = x + suffix
+            # Capture and remove known tail patterns (e.g., electricity carrier prod chains, regions)
+            x = re.sub(r'_electricity.*$', '', x)
+            x = re.sub(r'(_carrier_prod.*|_nuts\d+|_region.*)$', '', x)
 
             return x
 
@@ -87,15 +80,15 @@ def transform_data_to_powerbi(data: pd.DataFrame,
     data_long.to_csv(output_path, index=False)
 
 #loading data
-input_dir = r'C:\Users\1361185\OneDrive - UAB\Documentos\GitHub\LIVEN_onsite_offsite_github\example_data'
+input_dir = r'C:\Users\mique\PycharmProjects\LIVEN_onsite_offsite_github\example_data'
 baseline_input_path = os.path.join(input_dir, 'enbios_output_baseline_nuts2.csv')
-pniec_input_path = os.path.join(input_dir, 'enbios_output_pniec_nuts2.csv')
+#pniec_input_path = os.path.join(input_dir, 'enbios_output_pniec_nuts2.csv')
 data_bsl = pd.read_csv(baseline_input_path)
-data_pniec = pd.read_csv(pniec_input_path)
+#data_pniec = pd.read_csv(pniec_input_path)
 
 #define output path
 baseline_output_path = os.path.join(input_dir, 'operation_2024_nuts2_output.csv')
 pniec_output_path = os.path.join(input_dir, 'operation_pniec_2030_nuts2_output.csv')
 
 transform_data_to_powerbi(data_bsl, baseline_output_path, name_cleaning=True)
-transform_data_to_powerbi(data_pniec, pniec_output_path, name_cleaning=True)
+#transform_data_to_powerbi(data_pniec, pniec_output_path, name_cleaning=True)
